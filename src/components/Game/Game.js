@@ -4,44 +4,49 @@ import { sample } from "../../utils";
 import { WORDS } from "../../data";
 import GuessInput from "../GuessInput";
 import GuessResults from "../GuessResults/GuessResults";
-import GameOverBanner from "../GameOverBanner/GameOverBanner";
 import Keyboard from "../Keyboard/Keyboard";
+import WonBanner from "../WonBanner/WonBanner";
+import LostBanner from "../LostBanner/LostBanner";
+import { checkGuess } from "../../game-helpers";
 
 function Game() {
   const [answer, setAnswer] = React.useState(() => sample(WORDS));
   const [guesses, setGuesses] = React.useState([]);
 
   const handleGuessSubmit = (guess) => {
-    setGuesses((prevGuesses) => [...prevGuesses, guess]);
+    const newGuesses = [...guesses, guess];
+    setGuesses(newGuesses);
   };
 
-  const resetGame = () => {
+  let gameStatus = "playing";
+  if (guesses.includes(answer.toUpperCase())) {
+    gameStatus = "won";
+  } else if (guesses.length >= 6) {
+    gameStatus = "lost";
+  }
+
+  const validatedGuesses = guesses.map((guess) => checkGuess(guess, answer));
+
+  const onResetGame = () => {
     setAnswer(sample(WORDS));
     setGuesses([]);
   };
 
-  let status = "playing";
-  if (guesses.includes(answer.toUpperCase())) {
-    status = "won";
-  } else if (guesses.length >= 6) {
-    status = "lost";
-  }
-
   return (
-    <div>
-      <GameOverBanner
-        status={status}
-        answer={answer}
-        numberOfGuesses={guesses.length}
-        resetGame={resetGame}
-      />
-      <GuessResults guesses={guesses} answer={answer} />
+    <>
+      {gameStatus === "won" && (
+        <WonBanner numberOfGuesses={guesses.length} onResetGame={onResetGame} />
+      )}
+      {gameStatus === "lost" && (
+        <LostBanner answer={answer} onResetGame={onResetGame} />
+      )}
+      <GuessResults validatedGuesses={validatedGuesses} />
       <GuessInput
         handleGuessSubmit={handleGuessSubmit}
-        disabled={status !== "playing"}
+        disabled={gameStatus !== "playing"}
       />
-      <Keyboard guesses={guesses} answer={answer} />
-    </div>
+      <Keyboard validatedGuesses={validatedGuesses} />
+    </>
   );
 }
 

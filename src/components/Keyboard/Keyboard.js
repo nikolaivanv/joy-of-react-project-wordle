@@ -17,25 +17,29 @@ const bestStatus = (status1, status2) => {
   return "incorrect";
 };
 
-function Keyboard({ guesses, answer }) {
+function Keyboard({ validatedGuesses }) {
   let letters = {};
-
-  guesses.forEach((guess) => {
-    checkGuess(guess, answer).forEach(({ letter, status }) => {
-      if (!letters[letter]) {
-        letters[letter] = status;
-      } else {
-        letters[letter] = bestStatus(letters[letter], status);
-      }
-    });
+  validatedGuesses.flat().forEach(({ letter, status }) => {
+    if (!letters[letter]) {
+      letters[letter] = status;
+    } else {
+      letters[letter] = bestStatus(letters[letter], status);
+    }
   });
 
   return (
-    <div>
+    <div className="keyboard">
       {rows.map((row, i) => (
-        <div key={i} className="guess">
+        <div key={i} className="keyboard-row">
           {row.map((letter) => (
-            <span key={letter} className={`cell  ${letters[letter]}`}>
+            <span
+              key={letter}
+              className={
+                letters[letter]
+                  ? `keyboard-key  ${letters[letter]}`
+                  : "keyboard-key"
+              }
+            >
               {letter}
             </span>
           ))}

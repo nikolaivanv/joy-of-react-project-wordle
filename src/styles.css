@@ -163,6 +163,10 @@ h1 {
 
 .banner {
   position: fixed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
   left: 0;
   right: 0;
   bottom: 0;
@@ -197,6 +201,16 @@ h1 {
   border: 0;
 }
 
+.reset-button {
+  padding: 8px;
+  background-color: var(--color-gray-300);
+  max-width: 200px;
+}
+
+.reset-button:hover {
+  background-color: var(--color-gray-500);
+}
+
 /*
   Modal styles
 
@@ -218,6 +232,43 @@ h1 {
 }
 .modal-title {
   margin-bottom: 0.5em;
+}
+
+.keyboard {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  justify-items: center;
+}
+
+.keyboard-row {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+}
+
+.keyboard-key {
+  padding: 8px 16px;
+  background: var(--color-gray-900);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.keyboard-key.correct {
+  background: var(--color-success);
+  color: white;
+}
+
+.keyboard-key.incorrect {
+  background: var(--color-gray-300);
+  color: white;
+}
+
+.keyboard-key.misplaced {
+  background: var(--color-warning);
+  color: white;
 }
 
 /*
